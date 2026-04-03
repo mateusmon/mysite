@@ -91,7 +91,6 @@ function App() {
     <main className="app">
       <section className="card">
         <h1>Cadastro e Login</h1>
-        <p className="subtitle">React + Node.js + PostgreSQL</p>
 
         <div className="tabs" role="tablist" aria-label="auth tabs">
           <button
