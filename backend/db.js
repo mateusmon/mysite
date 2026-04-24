@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+﻿import dotenv from "dotenv";
 import { Pool } from "pg";
 
 dotenv.config();
@@ -61,6 +61,42 @@ export async function initDatabase() {
       nome VARCHAR(120) NOT NULL,
       email VARCHAR(160) NOT NULL UNIQUE,
       senha VARCHAR(255) NOT NULL,
+      criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS favoritos_carros (
+      id BIGSERIAL PRIMARY KEY,
+      usuario_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      car_id VARCHAR(180) NOT NULL,
+      criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      CONSTRAINT uq_favorito_usuario_carro UNIQUE (usuario_id, car_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id BIGSERIAL PRIMARY KEY,
+      usuario_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      token_hash VARCHAR(128) NOT NULL UNIQUE,
+      criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      expira_em TIMESTAMPTZ NOT NULL,
+      revogado_em TIMESTAMPTZ
+    );
+
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id BIGSERIAL PRIMARY KEY,
+      usuario_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      token_hash VARCHAR(128) NOT NULL UNIQUE,
+      criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      expira_em TIMESTAMPTZ NOT NULL,
+      usado_em TIMESTAMPTZ
+    );
+
+    CREATE TABLE IF NOT EXISTS historico_comparacoes (
+      id BIGSERIAL PRIMARY KEY,
+      usuario_id BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+      model_ids_json JSONB NOT NULL,
+      km_mensal NUMERIC(10, 2) NOT NULL,
+      preco_combustivel NUMERIC(10, 2) NOT NULL,
+      resultados_json JSONB NOT NULL,
       criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `;
