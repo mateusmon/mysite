@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: mysite-web
+    runtime: node
+    plan: free
+    autoDeploy: true
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mysite-db
+          property: connectionString
+      - key: DB_SSL
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 30m
+      - key: REFRESH_TOKEN_DAYS
+        value: "30"
+      - key: PASSWORD_RESET_MINUTES
+        value: "30"
+
+databases:
+  - name: mysite-db
+    plan: free
+    databaseName: mysite
+    user: mysite_user

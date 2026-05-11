@@ -258,6 +258,29 @@ npm run dev
 - `npm run start`
 - `npm run test`
 
+## Deploy online (Render)
+
+O projeto ja esta preparado para deploy no Render com o arquivo:
+
+- `render.yaml`
+
+Passo a passo:
+
+1. Envie o codigo para o GitHub.
+2. No Render, clique em **New +** -> **Blueprint**.
+3. Conecte o repositorio `mysite`.
+4. O Render vai ler `render.yaml` e criar:
+   - 1 servico web (`mysite-web`)
+   - 1 banco PostgreSQL (`mysite-db`)
+5. Clique em **Apply** para iniciar o deploy.
+6. Ao finalizar, abra a URL publica gerada pelo Render.
+
+Observacoes:
+
+- O backend sobe pela porta definida em `PORT` automaticamente (ambiente Render).
+- O frontend eh servido pelo proprio backend em producao (`frontend/dist`).
+- O health check usa `GET /api/health`.
+
 ## Proximos passos sugeridos
 
 - Salvar historico de comparacoes por usuario
